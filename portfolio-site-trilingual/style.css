@@ -1,0 +1,291 @@
+/* ============================================
+   黃映萱 Portfolio — shared styles
+   Palette: aizome indigo on cool washi,
+   goldfish vermilion reserved for numbers.
+   ============================================ */
+
+:root {
+  --paper: #F5F3FB;        /* light lavender, brightness matched to the original blue-grey */
+  --ink: #2B2442;
+  --indigo: #4A3D8F;       /* deep violet (primary) */
+  --indigo-deep: #372C6E;
+  --muted: #6F6A8A;
+  --line: #DDD8EE;
+  --goldfish: #BE4E1B;     /* warm persimmon — near-complement of lavender */
+  --card: #FFFFFF;
+  --radius: 4px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: "Zen Kaku Gothic New", "Hiragino Kaku Gothic ProN", sans-serif;
+  font-size: 16px;
+  line-height: 1.9;
+  letter-spacing: 0.02em;
+  -webkit-font-smoothing: antialiased;
+}
+
+.display { font-family: "Shippori Mincho B1", "Hiragino Mincho ProN", serif; }
+
+.wrap { max-width: 760px; margin: 0 auto; padding: 0 24px; }
+
+/* ---------- header / nav ---------- */
+header.site {
+  border-bottom: 1px solid var(--line);
+  background: var(--paper);
+}
+header.site .wrap {
+  display: flex; align-items: baseline; justify-content: space-between;
+  flex-wrap: wrap; gap: 8px 20px; padding-top: 22px; padding-bottom: 18px;
+}
+.site-name {
+  font-family: "Shippori Mincho B1", serif;
+  font-size: 23px; font-weight: 600; letter-spacing: 0.12em;
+  color: var(--indigo-deep); text-decoration: none;
+}
+nav.main { display: flex; gap: 22px; flex-wrap: wrap; }
+nav.main a {
+  font-size: 13px; letter-spacing: 0.08em; text-decoration: none;
+  color: var(--muted); padding-bottom: 2px; border-bottom: 1px solid transparent;
+}
+nav.main a:hover, nav.main a[aria-current="page"] {
+  color: var(--indigo-deep); border-bottom-color: var(--indigo-deep);
+}
+
+/* ---------- section labels ---------- */
+.eyebrow {
+  display: inline-block; font-size: 12px; letter-spacing: 0.22em;
+  color: var(--indigo); border-left: 3px solid var(--indigo);
+  padding-left: 10px; margin-bottom: 18px; font-weight: 500;
+}
+
+section.block { padding: 72px 0 8px; }
+section.block:last-of-type { padding-bottom: 80px; }
+
+h1.page-title {
+  font-family: "Shippori Mincho B1", serif;
+  font-size: clamp(26px, 4.6vw, 38px);
+  font-weight: 600; line-height: 1.5; letter-spacing: 0.04em;
+  color: var(--indigo-deep);
+}
+h2 {
+  font-family: "Shippori Mincho B1", serif;
+  font-size: 22px; font-weight: 600; letter-spacing: 0.06em;
+  color: var(--indigo-deep); margin-bottom: 20px;
+}
+p.lede { color: var(--muted); margin-top: 14px; max-width: 40em; }
+
+/* ---------- hero ---------- */
+.hero { padding: 84px 0 24px; }
+.hero h1 {
+  font-family: "Shippori Mincho B1", serif;
+  font-size: clamp(28px, 5.2vw, 44px);
+  font-weight: 600; line-height: 1.6; letter-spacing: 0.04em;
+  color: var(--indigo-deep);
+}
+.hero .sub { margin-top: 20px; color: var(--muted); max-width: 36em; }
+
+/* signature: translation strip */
+.translate {
+  display: grid; grid-template-columns: 1fr 56px 1fr;
+  align-items: center; gap: 8px;
+  margin: 56px 0 24px; padding: 30px 26px;
+  background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+}
+.translate .col-label {
+  grid-column: span 1; font-size: 11px; letter-spacing: 0.2em;
+  color: var(--muted); margin-bottom: 12px;
+}
+.frag-box { position: relative; min-height: 150px; }
+.frag {
+  position: absolute; display: inline-block;
+  font-size: 13px; color: var(--muted);
+  background: var(--paper); border: 1px solid var(--line);
+  padding: 4px 10px; border-radius: 2px; white-space: nowrap;
+  opacity: 0; transform: translateY(6px) rotate(var(--r, 0deg));
+  animation: settle 0.7s ease forwards;
+}
+@keyframes settle { to { opacity: 1; transform: translateY(0) rotate(var(--r, 0deg)); } }
+.frag:nth-child(1) { top: 4px;  left: 2%;  --r: -3deg; animation-delay: .15s; }
+.frag:nth-child(2) { top: 44px; left: 24%; --r: 2deg;  animation-delay: .35s; }
+.frag:nth-child(3) { top: 86px; left: 6%;  --r: -1.5deg; animation-delay: .55s; }
+.frag:nth-child(4) { top: 122px; left: 30%; --r: 2.5deg; animation-delay: .75s; }
+
+.translate .arrow {
+  text-align: center; font-size: 22px; color: var(--goldfish);
+  font-family: "Shippori Mincho B1", serif;
+}
+.struct { list-style: none; }
+.struct li {
+  font-size: 13.5px; padding: 7px 0 7px 16px; position: relative;
+  border-bottom: 1px solid var(--line); color: var(--ink);
+  opacity: 0; animation: settle 0.6s ease forwards;
+}
+.struct li:last-child { border-bottom: none; }
+.struct li::before {
+  content: ""; position: absolute; left: 0; top: 50%;
+  width: 6px; height: 1.5px; background: var(--indigo);
+}
+.struct li:nth-child(1) { animation-delay: .9s; }
+.struct li:nth-child(2) { animation-delay: 1.05s; }
+.struct li:nth-child(3) { animation-delay: 1.2s; }
+.struct li:nth-child(4) { animation-delay: 1.35s; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .frag, .struct li { animation: none; opacity: 1; transform: rotate(var(--r, 0deg)); }
+}
+
+/* ---------- case cards ---------- */
+.case-card {
+  display: block; text-decoration: none; color: inherit;
+  background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 28px 28px 24px; margin-bottom: 18px;
+  transition: border-color .2s ease;
+}
+.case-card:hover { border-color: var(--indigo); }
+.case-card .meta {
+  font-size: 12px; letter-spacing: 0.14em; color: var(--muted); margin-bottom: 8px;
+}
+.case-card h3 {
+  font-family: "Shippori Mincho B1", serif;
+  font-size: 19px; font-weight: 600; color: var(--indigo-deep);
+  letter-spacing: 0.04em; line-height: 1.6;
+}
+.case-card .row { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; flex-wrap: nowrap; }
+.case-card .row > div:first-child { min-width: 0; }
+.case-card .stat { flex-shrink: 0; }
+.stat .label { max-width: 15em; }
+.case-card .desc { font-size: 14px; color: var(--muted); margin-top: 10px; max-width: 30em; }
+.stat { text-align: right; }
+.stat .num {
+  font-family: "Shippori Mincho B1", serif;
+  font-size: 40px; font-weight: 600; color: var(--goldfish); line-height: 1;
+  white-space: nowrap;
+}
+.stat .num small { font-size: 18px; }
+.stat .label { font-size: 11.5px; color: var(--muted); letter-spacing: 0.08em; margin-top: 6px; }
+
+/* ---------- tags ---------- */
+.tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.tag {
+  font-size: 12px; color: var(--indigo); border: 1px solid var(--line);
+  background: var(--paper); padding: 3px 12px; border-radius: 999px;
+  letter-spacing: 0.06em;
+}
+
+/* ---------- case detail pages ---------- */
+.case-hero { padding: 72px 0 12px; }
+.case-hero .meta { font-size: 13px; letter-spacing: 0.14em; color: var(--muted); margin-bottom: 14px; }
+.result-band {
+  display: flex; gap: 40px; flex-wrap: wrap;
+  border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+  padding: 26px 0; margin: 40px 0 8px;
+}
+.result-band .stat { text-align: left; }
+.result-band .num {
+  font-family: "Shippori Mincho B1", serif;
+  font-size: 32px; font-weight: 600; color: var(--goldfish); line-height: 1;
+}
+.result-band .num small { font-size: 15px; }
+.result-band .label { font-size: 12.5px; color: var(--muted); margin-top: 8px; letter-spacing: 0.06em; }
+
+.step { margin-bottom: 44px; }
+.step h2 { display: flex; align-items: baseline; gap: 14px; }
+.step h2 .k {
+  font-size: 12px; letter-spacing: 0.2em; color: var(--goldfish); font-weight: 500;
+  font-family: "Zen Kaku Gothic New", sans-serif;
+}
+.step p { max-width: 42em; margin-bottom: 12px; }
+.step ul { margin: 8px 0 8px 1.3em; max-width: 40em; }
+.step li { margin-bottom: 8px; }
+
+.before-after {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 1px;
+  background: var(--line); border: 1px solid var(--line); border-radius: var(--radius);
+  overflow: hidden; margin: 28px 0;
+}
+.before-after > div { background: var(--card); padding: 20px 22px; }
+.before-after .ba-label { font-size: 11px; letter-spacing: 0.2em; color: var(--muted); margin-bottom: 10px; }
+.before-after ul { list-style: none; }
+.before-after li { font-size: 13.5px; padding: 5px 0; border-bottom: 1px dashed var(--line); }
+.before-after li:last-child { border-bottom: none; }
+.before-after .after .ba-label { color: var(--goldfish); }
+
+.note-draft {
+  font-size: 12.5px; color: var(--muted); background: #EEEBF8;
+  border: 1px dashed var(--line); border-radius: var(--radius);
+  padding: 10px 14px; margin-top: 40px;
+}
+
+/* ---------- user manual ---------- */
+.manual-card {
+  background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 26px 28px; margin-bottom: 18px;
+}
+.manual-card h3 {
+  font-family: "Shippori Mincho B1", serif; font-size: 17px; font-weight: 600;
+  color: var(--indigo-deep); letter-spacing: 0.05em; margin-bottom: 12px;
+}
+.manual-card ul { list-style: none; }
+.manual-card li {
+  padding: 9px 0 9px 20px; border-bottom: 1px solid var(--line);
+  position: relative; font-size: 14.5px;
+}
+.manual-card li:last-child { border-bottom: none; }
+.manual-card li::before {
+  content: ""; position: absolute; left: 0; top: 19px;
+  width: 7px; height: 7px; border-radius: 50%;
+}
+.manual-card.plus li::before { background: var(--indigo); }
+.manual-card.minus li::before { background: var(--goldfish); }
+.placeholder { color: var(--muted); font-style: normal; }
+.placeholder::after { content: "（ここに記入）"; font-size: 12px; color: var(--goldfish); margin-left: 6px; }
+
+/* ---------- footer ---------- */
+footer.site {
+  border-top: 1px solid var(--line); margin-top: 40px;
+  padding: 36px 0 48px; color: var(--muted); font-size: 13px;
+}
+footer.site .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+footer.site a { color: var(--indigo); text-decoration: none; }
+footer.site a:hover { text-decoration: underline; }
+
+a:focus-visible, .case-card:focus-visible, button:focus-visible {
+  outline: 2px solid var(--goldfish); outline-offset: 3px;
+}
+
+/* back link */
+.back { font-size: 13px; letter-spacing: 0.08em; text-decoration: none; color: var(--muted); }
+.back:hover { color: var(--indigo-deep); }
+
+/* ---------- responsive ---------- */
+@media (max-width: 640px) {
+  .case-card .row { flex-wrap: wrap; }
+  .translate { grid-template-columns: 1fr; }
+  .translate .arrow { transform: rotate(90deg); padding: 6px 0; }
+  .frag-box { min-height: 160px; }
+  .before-after { grid-template-columns: 1fr; }
+  .stat .num { font-size: 32px; }
+  .result-band { gap: 24px; }
+  .result-band .num { font-size: 26px; }
+}
+
+/* ---------- essay articles ---------- */
+.article { max-width: 42em; padding-bottom: 40px; }
+.article p { margin-bottom: 1.3em; }
+.article h2 { margin-top: 44px; }
+.article .art-date { font-size: 12.5px; letter-spacing: 0.14em; color: var(--muted); }
+.essay-link h3 { transition: color .2s ease; }
+.essay-link:hover h3 { color: var(--goldfish); }
+
+/* language switcher */
+.lang-switch { font-size: 12.5px; letter-spacing: 0.06em; color: var(--muted); }
+.lang-switch a { color: var(--muted); text-decoration: none; border-bottom: 1px solid var(--line); }
+.lang-switch a:hover { color: var(--indigo-deep); border-bottom-color: var(--indigo-deep); }
+.lang-switch strong { color: var(--indigo-deep); font-weight: 700; }
