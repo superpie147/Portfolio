@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About Me — Patricia Huang</title>
+<meta name="description" content="Eight years of turning vague requests into structures anyone can execute.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<header class="site">
+  <div class="wrap">
+    <a class="site-name" href="index.html">Patricia Huang</a>
+    <nav class="main">
+      <a href="index.html">Home</a>
+      <a href="index.html#cases">Case Studies</a>
+      <a href="projects.html">Side Projects</a>
+      <a href="user-manual.html">User Manual</a>
+      <a href="essays.html">Articles</a>
+    </nav>
+    <div class="lang-switch"><a href="../ja/about.html">日本語</a> ・ <a href="../zh/about.html">中文</a> ・ <strong>EN</strong></div>
+  </div>
+</header>
+<main>
+<div class="wrap">
+  <div class="case-hero">
+    <div class="meta">ABOUT ME</div>
+    <h1 class="page-title">About Me</h1>
+    <p class="lede">Raised in Taiwan, worked in Shanghai, studying in Tokyo. For the full working record, see the <a href='index.html#cases'>case studies</a>.</p>
+  </div>
+  <div class="with-toc" style="margin-top:24px">
+    <article class="article">
+      <h2>Education</h2><ul><li>B.A. in Restaurant, Hotel and Institutional Management, Fu Jen Catholic University, Taiwan | 2012–2016</li></ul>
+      <h2>Language Skill</h2><ul><li>Mandarin (native)</li><li>English (business)</li><li>Japanese (business | JLPT N2; N1 in progress)</li></ul>
+      <h2>A Few Fun Facts</h2><ul><li>Cooking: from paella to Taiwanese braised pork rice — my signature dish is mapo tofu. The spicier, the better</li><li>Games: the one I have played longest is Dynasty Warriors, which got me hooked on Three Kingdoms history</li><li>Cat: I live with a cat as food-obsessed as I am. The moment I finish cooking, it jumps into the wok for an inspection (photo evidence attached)</li></ul>
+      <figure class="photo"><img src="../assets/cat-in-wok.jpg" alt="A tabby cat standing inside a wok on the stove" loading="lazy"><figcaption>Exhibit A.</figcaption></figure>
+      <h2>Contact</h2><ul><li>Email: <a href="mailto:superpie147@gmail.com">superpie147@gmail.com</a></li><li>LinkedIn: <a href="https://www.linkedin.com/in/patriciahuang147/">view my profile</a></li></ul>
+    </article>
+    <aside class="toc-box"><div class="toc-title">CONTENTS</div><ul id="toc" class="toc"></ul></aside>
+  </div>
+</div>
+<script>
+(function () {
+  var art = document.querySelector(".article");
+  var toc = document.getElementById("toc");
+  if (!art || !toc) return;
+  var hs = art.querySelectorAll("h2, h3");
+  if (!hs.length) { toc.parentElement.style.display = "none"; return; }
+  var n2 = 0, n3 = 0, html = "";
+  hs.forEach(function (h, i) {
+    if (!h.id) h.id = "sec-" + i;
+    var num;
+    if (h.tagName === "H2") { n2++; n3 = 0; num = n2; }
+    else { n3++; num = n2 + "." + n3; }
+    html += '<li class="' + h.tagName.toLowerCase() + '"><a href="#' + h.id + '">' + num + "&nbsp;&nbsp;" + h.textContent + "</a></li>";
+  });
+  toc.innerHTML = html;
+})();
+</script>
+</main>
+<footer class="site">
+  <div class="wrap">
+    <span>© 2026 Patricia Huang</span>
+    <span><a href="about.html">About Me</a> ・ <a href="index.html">Back to home</a></span>
+  </div>
+</footer>
+</body>
+</html>

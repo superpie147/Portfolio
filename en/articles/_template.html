@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Essay title｜Patricia Huang</title>
+<meta name="description" content="Essay title">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+<header class="site">
+  <div class="wrap">
+    <a class="site-name" href="../index.html">Patricia Huang</a>
+    <nav class="main">
+      <a href="../index.html">Home</a>
+      <a href="../index.html#cases">Case Studies</a>
+      <a href="../projects.html">Side Projects</a>
+      <a href="../user-manual.html">User Manual</a>
+      <a href="../essays.html" aria-current="page">Articles</a>
+    </nav>
+    <div class="lang-switch"><a href="../../ja/articles.html">日本語</a> ・ <a href="../../zh/articles.html">中文</a> ・ <strong>EN</strong></div>
+  </div>
+</header>
+<main>
+<div class="wrap">
+  <div class="case-hero">
+    <a class="back" href="../articles.html">← Back to articles</a>
+    <div class="meta art-date" style="margin-top:26px">ESSAY ｜ 2026-XX-XX</div>
+    <h1 class="page-title">Essay title</h1>
+  </div>
+  <div class="with-toc">
+    <article class="article">
+    <p>[Opening: drop the reader into the moment you observed. One concrete scene beats ten abstract lines.]</p>
+    <p>[Body: unfold your observation. One point per paragraph.]</p>
+    <h2>[Optional subheading]</h2>
+    <p>[Use h2 subheadings when the essay needs sections.]</p>
+    <p>[Ending: no need for a conclusion — a question you are still sitting with works too.]</p>
+    </article>
+    <aside class="toc-box"><div class="toc-title">CONTENTS</div><ul id="toc" class="toc"></ul></aside>
+  </div>
+</div>
+<script>
+(function () {
+  var art = document.querySelector(".article");
+  var toc = document.getElementById("toc");
+  if (!art || !toc) return;
+  var hs = art.querySelectorAll("h2, h3");
+  if (!hs.length) { toc.parentElement.style.display = "none"; return; }
+  var n2 = 0, n3 = 0, html = "";
+  hs.forEach(function (h, i) {
+    if (!h.id) h.id = "sec-" + i;
+    var num;
+    if (h.tagName === "H2") { n2++; n3 = 0; num = n2; }
+    else { n3++; num = n2 + "." + n3; }
+    html += '<li class="' + h.tagName.toLowerCase() + '"><a href="#' + h.id + '">' + num + "&nbsp;&nbsp;" + h.textContent + "</a></li>";
+  });
+  toc.innerHTML = html;
+})();
+</script>
+</main>
+<footer class="site">
+  <div class="wrap">
+    <span>© 2026 Patricia Huang</span>
+    <span><a href="../about.html">About Me</a> ・ <a href="../index.html">Back to home</a></span>
+  </div>
+</footer>
+</body>
+</html>
