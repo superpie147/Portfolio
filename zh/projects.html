@@ -19,7 +19,7 @@
       <a href="index.html#cases">案例</a>
       <a href="projects.html" aria-current="page">個人專案</a>
       <a href="user-manual.html">使用說明書</a>
-      <a href="essays.html">文章</a>
+      <a href="articles.html">文章</a>
     </nav>
     <div class="lang-switch"><a href="../ja/projects.html">日本語</a> ・ <strong>中文</strong> ・ <a href="../en/projects.html">EN</a></div>
   </div>
@@ -42,6 +42,24 @@
       <div class="meta">個人開發 ｜ 2026 ｜ 流程自動化</div><h3>Notion × Make 求職管理自動化</h3>
       <p class="desc" style="max-width:none">用 Notion 建立求職應徵的管理系統，並串接自動化工具 Make：應徵超過 30 天的案件自動更新狀態。規模很小，但「找出重複的手工作業、把它變成機制」的過程和工作裡做的完全相同。</p>
       <div class="tags"><span class="tag">流程設計</span><span class="tag">工具串接</span><span class="tag">自動化</span></div>
+    </div>
+    <div class="case-card" style="cursor:default">
+      <div class="meta">個人開發 ｜ 2026 ｜ Web 應用（互動地圖）</div><h3>日本100名城 巡禮帳</h3>
+      <p class="desc" style="max-width:none">把日本100名城畫在一張手繪風的日本地圖上：登過的城蓋上朱紅印章，記下登城日和感想，進度一目瞭然。刻意不做帳號、不做後端——資料留在自己的瀏覽器裡，可以匯出備份，也能一鍵產生唯讀的公開版分享給朋友。從「我想要的紀錄方式，市面上找不到」出發，自己定義規格、畫地圖、做出來。</p>
+      <div class="tags"><span class="tag">需求定義</span><span class="tag">介面設計</span><span class="tag">資料設計</span><span class="tag">實作・上線</span><span class="tag">AI 協作開發</span></div>
+      <p style="margin-top:16px;font-size:14px">→ <a href="https://superpie147.github.io/jpcastle100/" style="color:var(--goldfish)">打開地圖，做一份自己的登城紀錄</a></p>
+    </div>
+    <div class="case-card" style="cursor:default">
+      <div class="meta">個人開發 ｜ 2026 ｜ Web 應用 × 雲端資料庫</div><h3>100個小目標</h3>
+      <p class="desc" style="max-width:none">每年寫下 100 個小目標，一整年慢慢打勾、加上照片和紀錄，年底回頭看，就是一本自己的回憶錄。這次不只做畫面：用 Google 登入和 Supabase 雲端資料庫，設計了「草稿階段自由編輯 → 公開後結構鎖定、進度仍可更新」的規則，並且把權限控管做在資料庫那一層，而不是只做在前端。也是我第一次完整跑過「設計 → 獨立驗證 → 修正 → 再驗證」的安全檢查流程。</p>
+      <div class="tags"><span class="tag">需求定義</span><span class="tag">資料模型設計</span><span class="tag">權限設計</span><span class="tag">驗證流程</span><span class="tag">實作・上線</span><span class="tag">AI 協作開發</span></div>
+      <p style="margin-top:16px;font-size:14px">→ <a href="https://superpie147.github.io/Yearly100Goals/" style="color:var(--goldfish)">打開應用程式（Google 登入後可建立自己的清單）</a></p>
+    </div>
+    <div class="case-card" style="cursor:default">
+      <div class="meta">個人開發 ｜ 2026 ｜ PWA（可加到手機主畫面）</div><h3>今天煮什麼？——冰箱食譜提案</h3>
+      <p class="desc" style="max-width:none">打開冰箱卻不知道要煮什麼，是每天的小困擾。把冰箱裡有的食材勾起來，程式就依「食材齊全度」和「調味料齊全度」兩個百分比推薦料理（日式・台式・簡單西式，中日文並記），食材、調味料、料理都能在後台自己增減。外觀走「手繪料理筆記」路線——方格紙、手寫字體、紙膠帶與便利貼——是從三個設計方向的靜態稿裡挑出來的；資料層刻意隔離，之後可以直接換成雲端同步。</p>
+      <div class="tags"><span class="tag">需求定義</span><span class="tag">資料設計</span><span class="tag">視覺設計</span><span class="tag">PWA</span><span class="tag">持續改善</span><span class="tag">AI 協作開發</span></div>
+      <p style="margin-top:16px;font-size:14px">→ <a href="https://superpie147.github.io/fridge-recipes/" style="color:var(--goldfish)">實際用用看</a></p>
     </div>
   </section>
 </div>

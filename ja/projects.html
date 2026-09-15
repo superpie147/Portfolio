@@ -19,7 +19,7 @@
       <a href="index.html#cases">Case Studies</a>
       <a href="projects.html" aria-current="page">Side Projects</a>
       <a href="user-manual.html">User Manual</a>
-      <a href="essays.html">Articles</a>
+      <a href="articles.html">Articles</a>
     </nav>
     <div class="lang-switch"><strong>日本語</strong> ・ <a href="../zh/projects.html">中文</a> ・ <a href="../en/projects.html">EN</a></div>
   </div>
@@ -42,6 +42,24 @@
       <div class="meta">個人開発 ｜ 2026 ｜ 業務自動化</div><h3>Notion × Make による求職管理の自動化</h3>
       <p class="desc" style="max-width:none">転職活動の応募管理をNotionで構築し、Make（自動化ツール）と連携。応募から30日経過した案件を自動でステータス更新する仕組みを設計・実装しました。小さくても、「手作業の繰り返し」を見つけて仕組みに変えるプロセスは仕事と同じです。</p>
       <div class="tags"><span class="tag">プロセス設計</span><span class="tag">ツール連携</span><span class="tag">自動化</span></div>
+    </div>
+    <div class="case-card" style="cursor:default">
+      <div class="meta">個人開発 ｜ 2026 ｜ Webアプリ（インタラクティブ地図）</div><h3>日本100名城 巡礼帳</h3>
+      <p class="desc" style="max-width:none">日本100名城を手描き風の日本地図に配置し、登城した城には朱印を押して、登城日と感想を記録。進捗がひと目でわかります。あえてアカウントもバックエンドも持たず、データは自分のブラウザに保存。バックアップの書き出しや、閲覧専用の公開版をワンクリックで生成して友人に共有することもできます。「自分が欲しい記録の形が世の中にない」から、仕様を決め、地図を描き、形にしました。</p>
+      <div class="tags"><span class="tag">要件定義</span><span class="tag">UI設計</span><span class="tag">データ設計</span><span class="tag">実装・公開</span><span class="tag">AIとの協働開発</span></div>
+      <p style="margin-top:16px;font-size:14px">→ <a href="https://superpie147.github.io/jpcastle100/" style="color:var(--goldfish)">地図を開いて、自分の登城記録を作る</a></p>
+    </div>
+    <div class="case-card" style="cursor:default">
+      <div class="meta">個人開発 ｜ 2026 ｜ Webアプリ × クラウドDB</div><h3>100個の小さな目標</h3>
+      <p class="desc" style="max-width:none">毎年100個の小さな目標を書き出し、一年かけてチェックを入れ、写真やメモを添えていく。年末に振り返れば、その年の回顧録になります。今回は画面だけでなく、Googleログインと Supabase のクラウドDBを採用。「下書き中は自由に編集 → 公開後は構造を固定し、進捗だけ更新可能」というルールを自分で設計し、権限制御をフロントではなくデータベース層で担保しました。「設計 → 第三者検証 → 修正 → 再検証」というセキュリティレビューの流れを、初めて最後まで回したプロジェクトでもあります。</p>
+      <div class="tags"><span class="tag">要件定義</span><span class="tag">データモデル設計</span><span class="tag">権限設計</span><span class="tag">検証プロセス</span><span class="tag">実装・公開</span><span class="tag">AIとの協働開発</span></div>
+      <p style="margin-top:16px;font-size:14px">→ <a href="https://superpie147.github.io/Yearly100Goals/" style="color:var(--goldfish)">アプリを開く（Googleログインで自分のリストを作成できます）</a></p>
+    </div>
+    <div class="case-card" style="cursor:default">
+      <div class="meta">個人開発 ｜ 2026 ｜ PWA（スマホのホーム画面に追加可）</div><h3>今日なに作る？──冷蔵庫レシピ提案</h3>
+      <p class="desc" style="max-width:none">冷蔵庫を開けても何を作るか決まらない、毎日の小さな悩みから。手元にある食材にチェックを入れると、「食材の充足度」と「調味料の充足度」という2つの割合でレシピを提案します（和食・台湾料理・簡単な洋食、中国語と日本語を併記）。食材・調味料・レシピは管理画面から自分で増減可能。見た目は「手描きの料理ノート」──方眼紙、手書きフォント、マスキングテープと付箋──を3つのデザイン案の静止画から選択。データ層は分離してあり、後からクラウド同期に差し替えられる設計です。</p>
+      <div class="tags"><span class="tag">要件定義</span><span class="tag">データ設計</span><span class="tag">ビジュアルデザイン</span><span class="tag">PWA</span><span class="tag">継続的な改善</span><span class="tag">AIとの協働開発</span></div>
+      <p style="margin-top:16px;font-size:14px">→ <a href="https://superpie147.github.io/fridge-recipes/" style="color:var(--goldfish)">実際に使ってみる</a></p>
     </div>
   </section>
 </div>
