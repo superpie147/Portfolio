@@ -30,10 +30,11 @@
     <h1>把還沒被說出口的需求，<br>變成所有人都能行動的結構。</h1>
     <p class="sub">站在客戶、團隊與合作夥伴之間，把模糊的期待梳理成可以執行的結構——這是我在台灣、上海、東京三個文化圈之間累積的八年紀錄。</p>
   </div>
-  <div class="translate">
-    <div><div class="col-label">耳邊聽到的話</div><div class="frag-box"><span class="frag">「就是覺得哪裡不好用」</span><span class="frag">「總之越快越好」</span><span class="frag">「跟上次那樣就行」</span><span class="frag">「我也說不太上來…」</span></div></div>
+  <div class="translate" aria-label="點一下，把模糊的需求排整齊">
+    <div><div class="col-label">耳邊聽到的話</div><div class="frag-box"><span class="frag">「就是覺得哪裡不好用」</span><span class="frag">「總之越快越好」</span><span class="frag">「跟上次那樣就行」</span><span class="frag">「我也說不太上來…」</span><span class="frag">「這個應該很簡單吧？」</span><span class="frag">「先做出來再說」</span></div></div>
     <div class="arrow" aria-hidden="true">→</div>
     <div><div class="col-label">交付出去的形狀</div><ul class="struct"><li>定義真正的課題</li><li>梳理各方的利害關係</li><li>任何人都能執行的步驟</li><li>可以被衡量的結果</li></ul></div>
+    <div class="tap-hint" aria-hidden="true">點一下看看</div>
   </div>
 </div>
 <div class="wrap">
@@ -80,5 +81,18 @@
     <span><a href="about.html">About Me</a> ・ <a href="index.html">回到首頁</a></span>
   </div>
 </footer>
+<script>
+(function(){
+  var t=document.querySelector('.translate'); if(!t) return;
+  t.classList.add('has-js'); t.setAttribute('tabindex','0'); t.setAttribute('role','button'); t.setAttribute('aria-pressed','false');
+  function clear(){
+    if(t.classList.contains('is-clear')) return;
+    t.classList.add('is-clear'); t.setAttribute('aria-pressed','true');
+    t.removeAttribute('role'); t.removeAttribute('tabindex');
+  }
+  t.addEventListener('click',clear);
+  t.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); clear(); } });
+})();
+</script>
 </body>
 </html>

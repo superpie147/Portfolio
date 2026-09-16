@@ -30,10 +30,11 @@
     <h1>Turning unspoken needs into<br>structures anyone can act on.</h1>
     <p class="sub">I work in the space between clients, teams, and partners — translating vague requests into structures people can actually execute. Eight years across Taiwan, Shanghai, and Tokyo.</p>
   </div>
-  <div class="translate">
-    <div><div class="col-label">WHAT I HEAR</div><div class="frag-box"><span class="frag">“It just feels off”</span><span class="frag">“ASAP, please”</span><span class="frag">“Same as last time”</span><span class="frag">“I can’t quite explain it…”</span></div></div>
+  <div class="translate" aria-label="Click to sort the vague requests into structure">
+    <div><div class="col-label">WHAT I HEAR</div><div class="frag-box"><span class="frag">“It just feels off”</span><span class="frag">“ASAP, please”</span><span class="frag">“Same as last time”</span><span class="frag">“I can’t quite explain it…”</span><span class="frag">“Should be simple, right?”</span><span class="frag">“Let’s just build it and see”</span></div></div>
     <div class="arrow" aria-hidden="true">→</div>
     <div><div class="col-label">WHAT I DELIVER</div><ul class="struct"><li>Define the real problem</li><li>Map each stakeholder’s interests</li><li>Steps anyone can follow</li><li>Results you can measure</li></ul></div>
+    <div class="tap-hint" aria-hidden="true">CLICK TO SORT IT OUT</div>
   </div>
 </div>
 <div class="wrap">
@@ -80,5 +81,18 @@
     <span><a href="about.html">About Me</a> ・ <a href="index.html">Back to home</a></span>
   </div>
 </footer>
+<script>
+(function(){
+  var t=document.querySelector('.translate'); if(!t) return;
+  t.classList.add('has-js'); t.setAttribute('tabindex','0'); t.setAttribute('role','button'); t.setAttribute('aria-pressed','false');
+  function clear(){
+    if(t.classList.contains('is-clear')) return;
+    t.classList.add('is-clear'); t.setAttribute('aria-pressed','true');
+    t.removeAttribute('role'); t.removeAttribute('tabindex');
+  }
+  t.addEventListener('click',clear);
+  t.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); clear(); } });
+})();
+</script>
 </body>
 </html>

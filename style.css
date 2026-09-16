@@ -96,49 +96,93 @@ p.lede { color: var(--muted); margin-top: 14px; max-width: 40em; }
   align-items: center; gap: 8px;
   margin: 56px 0 24px; padding: 30px 26px;
   background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+  position: relative; transition: border-color .2s ease;
 }
+/* before the visitor clicks, the whole strip is one big button */
+.translate.has-js:not(.is-clear) { cursor: pointer; }
+.translate.has-js:not(.is-clear):hover { border-color: var(--indigo); }
 .translate .col-label {
   grid-column: span 1; font-size: 11px; letter-spacing: 0.2em;
   color: var(--muted); margin-bottom: 12px;
 }
-.frag-box { position: relative; min-height: 150px; }
+
+/* left: fragments drift in and out, forever */
+.frag-box { position: relative; min-height: 190px; }
 .frag {
   position: absolute; display: inline-block;
   font-size: 13px; color: var(--muted);
   background: var(--paper); border: 1px solid var(--line);
   padding: 4px 10px; border-radius: 2px; white-space: nowrap;
   opacity: 0; transform: translateY(6px) rotate(var(--r, 0deg));
-  animation: settle 0.7s ease forwards;
+  animation: drift 12s ease-in-out infinite;
+  animation-delay: var(--d, 0s);
 }
-@keyframes settle { to { opacity: 1; transform: translateY(0) rotate(var(--r, 0deg)); } }
-.frag:nth-child(1) { top: 4px;  left: 2%;  --r: -3deg; animation-delay: .15s; }
-.frag:nth-child(2) { top: 44px; left: 24%; --r: 2deg;  animation-delay: .35s; }
-.frag:nth-child(3) { top: 86px; left: 6%;  --r: -1.5deg; animation-delay: .55s; }
-.frag:nth-child(4) { top: 122px; left: 30%; --r: 2.5deg; animation-delay: .75s; }
+/* each card is visible for ~3s of a 12s cycle (fade in 1s, hold 2s, fade out 1s) */
+@keyframes drift {
+  0%   { opacity: 0; transform: translateY(8px)   rotate(var(--r, 0deg)); }
+  9%   { opacity: 1; transform: translateY(0)     rotate(var(--r, 0deg)); }
+  26%  { opacity: 1; transform: translateY(-2px)  rotate(var(--r, 0deg)); }
+  34%  { opacity: 0; transform: translateY(-10px) rotate(var(--r, 0deg)); }
+  100% { opacity: 0; transform: translateY(8px)   rotate(var(--r, 0deg)); }
+}
+/* six slots 30px apart (cards overlap their neighbours); delays run 1,3,5,2,4,6
+   so vertical neighbours are at least 4s apart in time and never show together */
+.frag:nth-child(1) { top: 4px;   left: 2%;  --r: -3deg;   --d: 0s; }
+.frag:nth-child(2) { top: 34px;  left: 26%; --r: 2deg;    --d: 6s; }
+.frag:nth-child(3) { top: 64px;  left: 6%;  --r: -1.5deg; --d: 2s; }
+.frag:nth-child(4) { top: 94px;  left: 30%; --r: 2.5deg;  --d: 8s; }
+.frag:nth-child(5) { top: 124px; left: 10%; --r: -2deg;   --d: 4s; }
+.frag:nth-child(6) { top: 154px; left: 22%; --r: 1.5deg;  --d: 10s; }
 
 .translate .arrow {
   text-align: center; font-size: 22px; color: var(--goldfish);
   font-family: "Shippori Mincho B1", serif;
+  transition: opacity .7s ease;
 }
+.translate.has-js:not(.is-clear) .arrow { opacity: .3; }
+
+/* right: blurred and scattered until the strip is clicked, then it settles */
 .struct { list-style: none; }
 .struct li {
   font-size: 13.5px; padding: 7px 0 7px 16px; position: relative;
   border-bottom: 1px solid var(--line); color: var(--ink);
-  opacity: 0; animation: settle 0.6s ease forwards;
+  transition: opacity .8s ease, transform .8s cubic-bezier(.2,.8,.2,1),
+              filter .8s ease, border-color .8s ease;
+  transition-delay: var(--sd, 0s);
 }
 .struct li:last-child { border-bottom: none; }
 .struct li::before {
   content: ""; position: absolute; left: 0; top: 50%;
   width: 6px; height: 1.5px; background: var(--indigo);
+  transition: opacity .8s ease; transition-delay: var(--sd, 0s);
 }
-.struct li:nth-child(1) { animation-delay: .9s; }
-.struct li:nth-child(2) { animation-delay: 1.05s; }
-.struct li:nth-child(3) { animation-delay: 1.2s; }
-.struct li:nth-child(4) { animation-delay: 1.35s; }
+.struct li:nth-child(1) { --sx: 14px;  --sy: 6px;   --sr: -2deg;  --sd: 0s; }
+.struct li:nth-child(2) { --sx: -10px; --sy: -4px;  --sr: 1.5deg; --sd: .12s; }
+.struct li:nth-child(3) { --sx: 22px;  --sy: 8px;   --sr: -1deg;  --sd: .24s; }
+.struct li:nth-child(4) { --sx: -6px;  --sy: -10px; --sr: 2deg;   --sd: .36s; }
+.translate.has-js:not(.is-clear) .struct li {
+  opacity: .35; filter: blur(3px); border-bottom-color: transparent;
+  transform: translate(var(--sx, 0), var(--sy, 0)) rotate(var(--sr, 0deg));
+}
+.translate.has-js:not(.is-clear) .struct li::before { opacity: 0; }
+
+.tap-hint {
+  position: absolute; right: 18px; bottom: 11px;
+  font-size: 11.5px; letter-spacing: .12em; color: var(--goldfish);
+  opacity: 0; transition: opacity .4s ease; pointer-events: none;
+}
+.translate.has-js:not(.is-clear) .tap-hint { opacity: 1; animation: pulse 2.4s ease-in-out infinite; }
+@keyframes pulse { 50% { opacity: .35; } }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .frag, .struct li { animation: none; opacity: 1; transform: rotate(var(--r, 0deg)); }
+  .frag { animation: none; opacity: 1; transform: rotate(var(--r, 0deg)); }
+  .frag:nth-child(even) { display: none; } /* static cards must not overlap */
+  .translate.has-js:not(.is-clear) .struct li { opacity: 1; filter: none; transform: none; border-bottom-color: var(--line); }
+  .translate.has-js:not(.is-clear) .struct li::before { opacity: 1; }
+  .translate.has-js:not(.is-clear) .arrow { opacity: 1; }
+  .translate.has-js:not(.is-clear) { cursor: default; }
+  .tap-hint { display: none; }
 }
 
 /* ---------- case cards ---------- */
@@ -269,7 +313,7 @@ a:focus-visible, .case-card:focus-visible, button:focus-visible {
   .case-card .row { flex-wrap: wrap; }
   .translate { grid-template-columns: 1fr; }
   .translate .arrow { transform: rotate(90deg); padding: 6px 0; }
-  .frag-box { min-height: 160px; }
+  .frag-box { min-height: 190px; }
   .before-after { grid-template-columns: 1fr; }
   .stat .num { font-size: 32px; }
   .result-band { gap: 24px; }

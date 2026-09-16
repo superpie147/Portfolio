@@ -30,10 +30,11 @@
     <h1>まだ言葉になっていないニーズを、<br>誰もが動ける形に。</h1>
     <p class="sub">クライアント・チーム・パートナーの間に立ち、曖昧な要望を整理して、実行できる構造に変えてきました。台湾・上海・東京の三つの文化圏で培った、8年間の記録です。</p>
   </div>
-  <div class="translate">
-    <div><div class="col-label">聞こえてくる言葉</div><div class="frag-box"><span class="frag">「なんとなく使いにくい」</span><span class="frag">「とにかく急ぎで」</span><span class="frag">「前と同じ感じで」</span><span class="frag">「うまく言えないけど…」</span></div></div>
+  <div class="translate" aria-label="クリックして、曖昧な要望を整える">
+    <div><div class="col-label">聞こえてくる言葉</div><div class="frag-box"><span class="frag">「なんとなく使いにくい」</span><span class="frag">「とにかく急ぎで」</span><span class="frag">「前と同じ感じで」</span><span class="frag">「うまく言えないけど…」</span><span class="frag">「簡単でしょ？」</span><span class="frag">「とりあえず作ってみて」</span></div></div>
     <div class="arrow" aria-hidden="true">→</div>
     <div><div class="col-label">届ける形</div><ul class="struct"><li>本当の課題の定義</li><li>関係者ごとの利害の整理</li><li>誰でも実行できる手順</li><li>測定できる結果</li></ul></div>
+    <div class="tap-hint" aria-hidden="true">クリックしてみる</div>
   </div>
 </div>
 <div class="wrap">
@@ -80,5 +81,18 @@
     <span><a href="about.html">About Me</a> ・ <a href="index.html">Home に戻る</a></span>
   </div>
 </footer>
+<script>
+(function(){
+  var t=document.querySelector('.translate'); if(!t) return;
+  t.classList.add('has-js'); t.setAttribute('tabindex','0'); t.setAttribute('role','button'); t.setAttribute('aria-pressed','false');
+  function clear(){
+    if(t.classList.contains('is-clear')) return;
+    t.classList.add('is-clear'); t.setAttribute('aria-pressed','true');
+    t.removeAttribute('role'); t.removeAttribute('tabindex');
+  }
+  t.addEventListener('click',clear);
+  t.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); clear(); } });
+})();
+</script>
 </body>
 </html>
