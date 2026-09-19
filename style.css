@@ -90,38 +90,32 @@ p.lede { color: var(--muted); margin-top: 14px; max-width: 40em; }
 }
 .hero .sub { margin-top: 20px; color: var(--muted); max-width: 36em; }
 
-/* signature: translation strip */
+/* signature: translation strip
+   One box, two states. Before the click only "what I hear" is shown, centred,
+   with fragments drifting in and out. The click swaps it for "what I deliver",
+   also centred, which settles from blurred to clear. Both halves sit in the
+   same grid cell so the box never changes height. */
 .translate {
-  display: grid; grid-template-columns: 1fr 56px 1fr;
-  align-items: center; gap: 8px;
-  margin: 56px 0 24px; padding: 30px 26px;
+  display: grid; grid-template-columns: 1fr; align-items: center;
+  margin: 56px 0 24px; padding: 30px 26px 34px;
   background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
-  position: relative;
-  transition: border-color .2s ease,
-              grid-template-columns .7s cubic-bezier(.4,0,.2,1), gap .7s ease;
+  position: relative; transition: border-color .2s ease;
 }
-/* before the visitor clicks, the whole strip is one big button */
 .translate.has-js:not(.is-clear) { cursor: pointer; }
 .translate.has-js:not(.is-clear):hover { border-color: var(--indigo); }
-
-/* once clicked, the left column and arrow collapse away and the
-   delivered structure takes over the whole strip, centred */
-.hear { overflow: hidden; max-height: 320px; transition: opacity .45s ease, max-height .7s ease; }
-.translate.has-js.is-clear { grid-template-columns: 0fr 0px 1fr; gap: 0; }
-.translate.has-js.is-clear .hear { opacity: 0; max-height: 0; }
-.translate.has-js.is-clear .arrow { opacity: 0; }
-.translate.has-js.is-clear .deliver { text-align: center; }
-.translate.has-js.is-clear .col-label { margin-bottom: 18px; }
-.translate.has-js.is-clear .struct { max-width: 24em; margin: 0 auto; }
-.translate.has-js.is-clear .struct li { padding-left: 0; }
-.translate.has-js.is-clear .struct li::before { display: none; }
-.translate .col-label {
-  grid-column: span 1; font-size: 11px; letter-spacing: 0.2em;
-  color: var(--muted); margin-bottom: 12px;
+.translate .arrow { display: none; }
+.translate .col-label { font-size: 11px; letter-spacing: 0.2em; color: var(--muted); margin-bottom: 14px; }
+.hear, .deliver { text-align: center; }
+/* with JS the two halves overlay and cross-fade; without JS they stack */
+.translate.has-js .hear, .translate.has-js .deliver {
+  grid-area: 1 / 1; transition: opacity .6s ease, visibility .6s;
 }
+.translate:not(.has-js) .deliver { margin-top: 28px; }
+.translate.has-js:not(.is-clear) .deliver { opacity: 0; visibility: hidden; }
+.translate.has-js.is-clear .hear { opacity: 0; visibility: hidden; }
 
-/* left: fragments drift in and out, forever */
-.frag-box { position: relative; min-height: 190px; }
+/* left: fragments drift in and out, forever, inside a centred box */
+.frag-box { position: relative; min-height: 190px; width: min(100%, 340px); margin: 0 auto; }
 .frag {
   position: absolute; display: inline-block;
   font-size: 13px; color: var(--muted);
@@ -150,40 +144,26 @@ p.lede { color: var(--muted); margin-top: 14px; max-width: 40em; }
 .frag:nth-child(4) { top: 94px;  left: 4%;  --r: -1.5deg; --d: 8s; }  /* 5th: left  */
 .frag:nth-child(6) { top: 154px; left: 20%; --r: 1.5deg;  --d: 10s; } /* 6th: right */
 
-.translate .arrow {
-  text-align: center; font-size: 22px; color: var(--goldfish);
-  font-family: "Shippori Mincho B1", serif;
-  transition: opacity .7s ease;
-}
-.translate.has-js:not(.is-clear) .arrow { opacity: .3; }
-
-/* right: blurred and scattered until the strip is clicked, then it settles */
-.struct { list-style: none; }
+/* right: hidden until the click, then settles from blurred to clear */
+.struct { list-style: none; max-width: 24em; margin: 0 auto; }
 .struct li {
-  font-size: 13.5px; padding: 7px 0 7px 16px; position: relative;
-  border-bottom: 1px solid var(--line); color: var(--ink);
+  font-size: 13.5px; padding: 8px 0; border-bottom: 1px solid var(--line); color: var(--ink);
   transition: opacity .8s ease, transform .8s cubic-bezier(.2,.8,.2,1),
               filter .8s ease, border-color .8s ease;
   transition-delay: var(--sd, 0s);
 }
 .struct li:last-child { border-bottom: none; }
-.struct li::before {
-  content: ""; position: absolute; left: 0; top: 50%;
-  width: 6px; height: 1.5px; background: var(--indigo);
-  transition: opacity .8s ease; transition-delay: var(--sd, 0s);
-}
-.struct li:nth-child(1) { --sx: 14px;  --sy: 6px;   --sr: -2deg;  --sd: 0s; }
-.struct li:nth-child(2) { --sx: -10px; --sy: -4px;  --sr: 1.5deg; --sd: .12s; }
-.struct li:nth-child(3) { --sx: 22px;  --sy: 8px;   --sr: -1deg;  --sd: .24s; }
-.struct li:nth-child(4) { --sx: -6px;  --sy: -10px; --sr: 2deg;   --sd: .36s; }
+.struct li:nth-child(1) { --sx: 14px;  --sy: 6px;   --sr: -2deg;  --sd: .15s; }
+.struct li:nth-child(2) { --sx: -10px; --sy: -4px;  --sr: 1.5deg; --sd: .27s; }
+.struct li:nth-child(3) { --sx: 22px;  --sy: 8px;   --sr: -1deg;  --sd: .39s; }
+.struct li:nth-child(4) { --sx: -6px;  --sy: -10px; --sr: 2deg;   --sd: .51s; }
 .translate.has-js:not(.is-clear) .struct li {
   opacity: .35; filter: blur(3px); border-bottom-color: transparent;
   transform: translate(var(--sx, 0), var(--sy, 0)) rotate(var(--sr, 0deg));
 }
-.translate.has-js:not(.is-clear) .struct li::before { opacity: 0; }
 
 .tap-hint {
-  position: absolute; right: 18px; bottom: 11px;
+  position: absolute; left: 0; right: 0; bottom: 11px; text-align: center;
   font-size: 11.5px; letter-spacing: .12em; color: var(--goldfish);
   opacity: 0; transition: opacity .4s ease; pointer-events: none;
 }
@@ -194,9 +174,10 @@ p.lede { color: var(--muted); margin-top: 14px; max-width: 40em; }
   html { scroll-behavior: auto; }
   .frag { animation: none; opacity: 1; transform: rotate(var(--r, 0deg)); }
   .frag:nth-child(even) { display: none; } /* static cards must not overlap */
+  /* no swap: show both halves, stacked and clear */
+  .translate.has-js .hear { grid-area: 1 / 1; }
+  .translate.has-js .deliver { grid-area: 2 / 1; margin-top: 28px; opacity: 1; visibility: visible; }
   .translate.has-js:not(.is-clear) .struct li { opacity: 1; filter: none; transform: none; border-bottom-color: var(--line); }
-  .translate.has-js:not(.is-clear) .struct li::before { opacity: 1; }
-  .translate.has-js:not(.is-clear) .arrow { opacity: 1; }
   .translate.has-js:not(.is-clear) { cursor: default; }
   .tap-hint { display: none; }
 }
