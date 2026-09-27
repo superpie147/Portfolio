@@ -308,7 +308,7 @@ a.case-card:hover { background: var(--row-hover); }
   transition: background-size .25s ease, color .2s ease;
 }
 .project-row h3 a:hover, .project-row h3 a:focus-visible { color: var(--brick); background-size: 100% 2px; }
-.project-row .tags { margin-top: 14px; }
+.project-row .tags { margin-top: 12px; }
 
 /* the "try it" link, on the list and at the end of a project page */
 p.try { margin-top: 14px; font-size: 14px; }
@@ -320,10 +320,10 @@ p.try a { color: var(--brick); text-underline-offset: 3px; }
 .more-link a { color: var(--prussian); text-underline-offset: 3px; }
 
 /* ---------- tags ---------- */
-.tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 16px; }
 .tag {
-  font-size: 12.5px; color: var(--ink); border: 1.5px solid var(--ink);
-  padding: 3px 13px; border-radius: 999px; letter-spacing: 0.06em;
+  font-size: 11px; line-height: 1.5; color: var(--ink); border: 1px solid var(--ink);
+  padding: 1px 9px; border-radius: 999px; letter-spacing: 0.04em;
 }
 
 /* ---------- case detail pages ---------- */
