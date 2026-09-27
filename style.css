@@ -292,6 +292,33 @@ a.case-card:hover { background: var(--row-hover); }
 .case-card .desc { font-size: 14px; color: var(--muted); margin-top: 10px; max-width: 34em; }
 .case-card a { text-underline-offset: 3px; }
 
+/* ---------- side projects: the list ----------
+   Title, what it is, and the tags — nothing else.
+   The write-up lives on each project's own page. */
+.project-list { border-bottom: 2px solid var(--ink); }
+.project-row { border-top: 1px solid var(--ink); padding: 26px 0 24px; }
+.project-row .meta {
+  font-family: var(--f-mono); font-size: 11.5px; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 8px;
+}
+.project-row h3 { font-family: var(--f-disp); font-size: 21px; font-weight: 900; letter-spacing: 0.03em; line-height: 1.5; }
+.project-row h3 a {
+  color: var(--ink); text-decoration: none;
+  background-image: linear-gradient(var(--brick), var(--brick));
+  background-size: 0 2px; background-position: 0 100%; background-repeat: no-repeat;
+  transition: background-size .25s ease, color .2s ease;
+}
+.project-row h3 a:hover, .project-row h3 a:focus-visible { color: var(--brick); background-size: 100% 2px; }
+.project-row .tags { margin-top: 14px; }
+
+/* the "try it" link, on the list and at the end of a project page */
+p.try { margin-top: 14px; font-size: 14px; }
+p.try a { color: var(--brick); text-underline-offset: 3px; }
+.project-detail { margin-top: 34px; border-top: 1px solid var(--line); padding-top: 28px; }
+.project-detail p.try { margin-top: 26px; }
+
+.more-link { margin: 36px 0 8px; font-size: 14px; }
+.more-link a { color: var(--prussian); text-underline-offset: 3px; }
+
 /* ---------- tags ---------- */
 .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
 .tag {
