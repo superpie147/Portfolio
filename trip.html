@@ -268,6 +268,93 @@
   }
   .maplink:hover{background:var(--yellow)}
 
+  /* ---------- split ---------- */
+  .split-form{
+    background:var(--card);border:var(--bw) solid var(--ink);
+    border-radius:var(--r);box-shadow:var(--shadow-sm);
+    padding:18px;margin-bottom:20px;
+  }
+  .split-row{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+  .split-label{flex:none;width:62px;font-size:.92rem;opacity:.8}
+  .who-pick{display:flex;gap:8px}
+  .who-btn{
+    font:inherit;font-size:.95rem;cursor:pointer;color:var(--ink);
+    padding:6px 18px;background:var(--cream);
+    border:var(--bw) solid var(--ink);border-radius:999px;
+  }
+  .who-btn[data-who="paipai"].is-on{background:var(--coral);box-shadow:var(--shadow-sm)}
+  .who-btn[data-who="crystal"].is-on{background:var(--blue);box-shadow:var(--shadow-sm)}
+  .amt-wrap{
+    display:flex;align-items:center;flex:1;min-width:0;
+    border:var(--bw) solid var(--ink);border-radius:14px;background:var(--cream);
+    padding:0 12px;
+  }
+  .amt-wrap .yen{font-size:1.05rem;opacity:.6;flex:none;margin-right:4px}
+  .split-form input{
+    font:inherit;font-size:1.05rem;color:var(--ink);
+    border:0;background:transparent;outline:none;
+    flex:1;min-width:0;padding:8px 0;
+  }
+  .split-form input#splitLabel{
+    border:var(--bw) solid var(--ink);border-radius:14px;background:var(--cream);
+    padding:8px 12px;font-size:.95rem;
+  }
+  .split-form input[type=number]{-moz-appearance:textfield;appearance:textfield}
+  .split-form input[type=number]::-webkit-outer-spin-button,
+  .split-form input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+  .split-form input:focus-visible,
+  .amt-wrap:focus-within{outline:3px solid var(--yellow);outline-offset:2px}
+  .split-add{
+    font:inherit;font-size:1rem;font-weight:700;cursor:pointer;width:100%;
+    color:var(--ink);background:var(--green);
+    border:var(--bw) solid var(--ink);border-radius:16px;
+    padding:10px;box-shadow:var(--shadow-sm);
+    transition:transform .15s ease;
+  }
+  .split-add:hover{transform:translateY(-2px)}
+  .split-add:active{transform:translateY(1px);box-shadow:1px 1px 0 var(--ink)}
+  .split-form.is-readonly .split-add{background:var(--cream);opacity:.5;pointer-events:none}
+  .split-note{margin:10px 0 0;font-size:.82rem;opacity:.7}
+
+  .split-sum{
+    background:#FFF6E0;border:var(--bw) solid var(--ink);
+    border-radius:var(--r);padding:16px 18px;margin-bottom:20px;
+  }
+  .sum-grid{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(130px,1fr))}
+  .sum-cell{
+    background:var(--card);border:2px solid var(--ink);border-radius:14px;
+    padding:8px 12px;
+  }
+  .sum-cell span{display:block;font-size:.78rem;opacity:.7}
+  .sum-cell b{font-size:1.14rem}
+  .sum-cell.c-coral{background:var(--coral)}
+  .sum-cell.c-blue{background:var(--blue)}
+  .settle{
+    margin:14px 0 0;font-size:1.02rem;text-align:center;
+    padding-top:12px;border-top:2px dashed #ddd6c8;
+  }
+  .settle b{font-size:1.2rem}
+
+  .split-list{list-style:none;margin:0;padding:0}
+  .split-list li{
+    display:flex;align-items:center;gap:10px;
+    background:var(--card);border:var(--bw) solid var(--ink);
+    border-radius:16px;padding:9px 10px 9px 14px;margin-bottom:10px;
+  }
+  .e-label{flex:1;min-width:0;font-size:.95rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .e-date{flex:none;font-size:.8rem;opacity:.6}
+  .e-amt{flex:none;font-size:1.02rem}
+  .e-del{
+    flex:none;font:inherit;font-size:1rem;line-height:1;cursor:pointer;color:var(--ink);
+    width:28px;height:28px;background:var(--cream);
+    border:2px solid var(--ink);border-radius:50%;
+  }
+  .e-del:hover{background:var(--coral)}
+  .split-empty{
+    text-align:center;font-size:.92rem;opacity:.6;
+    padding:22px;border:var(--bw) dashed #c9c2b4;border-radius:var(--r);
+  }
+
   /* ---------- todo ---------- */
   .todo-top{
     display:flex;align-items:center;gap:14px;flex-wrap:wrap;
@@ -543,6 +630,7 @@
     <a href="#flights">航班</a>
     <a href="#days">每日行程</a>
     <a href="#todo">待辦</a>
+    <a href="#split">分帳</a>
     <button class="motion-btn" id="motionBtn" type="button" aria-pressed="false">動態：開</button>
   </div>
 </nav>
@@ -700,6 +788,38 @@
     <div class="todo-groups" id="todoGroups"></div>
   </section>
 
+  <!-- ============ split ============ -->
+  <section id="split">
+    <h2 class="h2"><span class="bar" style="background:var(--yellow)"></span>分帳</h2>
+    <p class="sub">誰先付了就記一筆，下面自動算出最後誰該補給誰。</p>
+
+    <form class="split-form" id="splitForm" autocomplete="off">
+      <div class="split-row">
+        <span class="split-label">誰付的</span>
+        <div class="who-pick" id="whoPick">
+          <button type="button" class="who-btn is-on" data-who="paipai" aria-pressed="true">派派</button>
+          <button type="button" class="who-btn" data-who="crystal" aria-pressed="false">Crystal</button>
+        </div>
+      </div>
+      <div class="split-row">
+        <span class="split-label">金額</span>
+        <div class="amt-wrap">
+          <span class="yen" aria-hidden="true">¥</span>
+          <input id="splitAmount" type="number" min="0" step="1" inputmode="numeric" placeholder="0" aria-label="金額（日圓）">
+        </div>
+      </div>
+      <div class="split-row">
+        <span class="split-label">項目</span>
+        <input id="splitLabel" type="text" maxlength="40" placeholder="可留空，例：宮島船票" aria-label="項目">
+      </div>
+      <button class="split-add" type="submit">記一筆</button>
+      <p class="split-note" id="splitNote">讀取中⋯</p>
+    </form>
+
+    <div id="splitSummary"></div>
+    <div id="splitList"></div>
+  </section>
+
   <footer>
     <p><b>小提醒</b>：所有時刻、票價、開放時間都是做這份行程時查到的參考值，日本的時刻表會改版，請在出發前再確認一次。</p>
     <ul>
@@ -744,8 +864,8 @@
     {
       who: "Crystal", no: "CI112", date: "10/31（六）", airline: "China Airlines",
       from: { code: "TPE", name: "桃園 T2" }, to: { code: "HIJ", name: "廣島" },
-      dep: "07:10", arr: "10:25",
-      foot: "派派先落地，在廣島機場等 Crystal，兩人一起搭巴士進市區。"
+      dep: "07:35", arr: "10:50",
+      foot: "⚠️ 已延誤改點：原本 07:10–10:25。派派先落地，在廣島機場等 Crystal，兩人一起搭巴士進市區。"
     },
     {
       who: "派派 ＋ Crystal", no: "BR191", date: "11/09（一）", airline: "EVA Air",
@@ -764,16 +884,16 @@
       items: [
         { time: "06:00", title: "抵達成田 T3、辦理登機", tags: [["walk", "京成／JR 到成田第 3 航廈"]], who: "派派" },
         { time: "07:40", title: "IJ621 成田 T3 → 廣島", note: ["09:10 抵達廣島機場"], tags: [["air", "約 1 小時 30 分"]], who: "派派", move: true },
-        { time: "07:10", title: "CI112 桃園 T2 → 廣島", note: ["10:25 抵達廣島機場"], tags: [["air", "約 2 小時 15 分"]], who: "Crystal", move: true },
-        { time: "09:30", title: "在廣島機場等 Crystal", note: ["派派是國內線抵達、Crystal 是國際線，約在 1 樓到著大廳碰面", "廣島機場不大，有展望台、賣店、咖啡座；行李先寄機場置物櫃比較輕鬆", "等待約兩小時，可以先吃早午餐"], tags: [["walk"]], who: "派派" },
-        { time: "11:10", title: "Crystal 出關、會合", note: ["10:25 落地，國際線入境＋提行李約 30–45 分", "廣島機場國際線到著出口只有一個，不會走散"], who: "Crystal" },
-        { time: "11:30", title: "機場巴士 → 廣島站（一起）", note: ["廣島機場沒有鐵路，一律搭利木津巴士", "約 50 分／約 1,450 円，配合班機時刻發車，12:20 前後到廣島站"], tags: [["bus", "約 50 分"]], move: true },
-        { time: "12:30", title: "先去飯店寄行李", note: ["ピンポンホテル在中區鶴見町，從廣島站搭広電或計程車約 10 分", "check-in 是 15:00，但行李通常可以先寄放在櫃台", "飯店就在平和大通り東端，沿著平和大通り往西走就是和平紀念公園"], tags: [["walk"]] },
-        { time: "13:00", title: "午餐：廣島燒", note: ["みっちゃん総本店（八丁堀本店）或 ekie おこのみ横丁", "廣島燒跟大阪燒不同，是一層層疊上去、還夾炒麵"], tags: [["walk"]] },
-        { time: "14:00", title: "廣島和平紀念資料館", must: true, note: ["11 月開館 8:30–18:00（最後入館 17:30），門票 200 円", "本館的展示很沉重，建議至少留 1.5 小時", "常有校外教學團，中午後人會比較少"], tags: [["train", "路面電車 原爆ドーム前"]] },
-        { time: "15:40", title: "原爆圓頂館・和平紀念公園", must: true, note: ["原爆ドーム（世界遺產）、原爆死沒者慰靈碑、和平之鐘", "折鶴之塔可以上展望台俯瞰整個公園跟圓頂館", "慰靈碑—和平之火—圓頂館是一條直線，站在慰靈碑前看過去"], tags: [["walk", "公園內步行"]] },
-        { time: "17:15", title: "元安川遊船或本通商店街", note: ["天氣好的話從元安橋搭小船看黃昏的圓頂館", "不然就逛本通、Hondori 拱廊商店街"], tags: [["walk"]] },
-        { time: "18:30", title: "晚餐：廣島牡蠣", note: ["11 月正是牡蠣季的開始", "推薦 牡蠣屋（宮島）之外，市區可找 かき傳、流川一帶的居酒屋"] }
+        { time: "07:35", title: "CI112 桃園 T2 → 廣島", note: ["10:50 抵達廣島機場", "⚠️ 航班已延誤改點，原本是 07:10–10:25"], tags: [["air", "約 2 小時 15 分"]], who: "Crystal", move: true },
+        { time: "09:30", title: "在廣島機場等 Crystal", note: ["派派是國內線抵達、Crystal 是國際線，約在 1 樓到著大廳碰面", "廣島機場不大，有展望台、賣店、咖啡座；行李先寄機場置物櫃比較輕鬆", "班機延誤後要等約 2 小時 20 分，可以先吃早午餐"], tags: [["walk"]], who: "派派" },
+        { time: "11:35", title: "Crystal 出關、會合", note: ["10:50 落地，國際線入境＋提行李約 30–45 分", "廣島機場國際線到著出口只有一個，不會走散"], who: "Crystal" },
+        { time: "11:55", title: "機場巴士 → 廣島站（一起）", note: ["廣島機場沒有鐵路，一律搭利木津巴士", "約 50 分／約 1,450 円，配合班機時刻發車，12:45 前後到廣島站"], tags: [["bus", "約 50 分"]], move: true },
+        { time: "13:00", title: "先去飯店寄行李", note: ["ピンポンホテル在中區鶴見町，從廣島站搭広電或計程車約 10 分", "check-in 是 15:00，但行李通常可以先寄放在櫃台", "飯店就在平和大通り東端，沿著平和大通り往西走就是和平紀念公園"], tags: [["walk"]] },
+        { time: "13:30", title: "午餐：廣島燒", note: ["みっちゃん総本店（八丁堀本店）或 ekie おこのみ横丁", "廣島燒跟大阪燒不同，是一層層疊上去、還夾炒麵"], tags: [["walk"]] },
+        { time: "14:30", title: "廣島和平紀念資料館", must: true, note: ["11 月開館 8:30–18:00（最後入館 17:30），門票 200 円", "本館的展示很沉重，建議至少留 1.5 小時", "常有校外教學團，中午後人會比較少"], tags: [["train", "路面電車 原爆ドーム前"]] },
+        { time: "16:15", title: "原爆圓頂館・和平紀念公園", must: true, note: ["原爆ドーム（世界遺產）、原爆死沒者慰靈碑、和平之鐘", "折鶴之塔可以上展望台俯瞰整個公園跟圓頂館", "慰靈碑—和平之火—圓頂館是一條直線，站在慰靈碑前看過去"], tags: [["walk", "公園內步行"]] },
+        { time: "17:40", title: "元安川遊船或本通商店街", note: ["天氣好的話從元安橋搭小船看黃昏的圓頂館", "不然就逛本通、Hondori 拱廊商店街"], tags: [["walk"]] },
+        { time: "18:45", title: "晚餐：廣島牡蠣", note: ["11 月正是牡蠣季的開始", "推薦 牡蠣屋（宮島）之外，市區可找 かき傳、流川一帶的居酒屋"] }
       ],
       tips: [
         "廣島市區移動主要靠「路面電車（広電）」，單程 220 円，一日券 700 円。",
@@ -812,9 +932,9 @@
       lead: "上午日本三名園，下午白牆與柳樹倒影的老街。",
       stay: { icon: "ic-bed", name: "Hotel Maira（ホテルマイラ）", map: "ホテルマイラ 岡山市北区錦町8-16", note: "岡山市北區錦町 8-16。check-in 14:00 / check-out 11:00。JR 岡山站東口步行約 10 分，AEON MALL 岡山步行 3–5 分。" },
       items: [
-        { time: "06:40", title: "廣島飯店退房 → 廣島站", note: ["走在來線比新幹線多花約 2 小時 20 分，所以要早出發"], tags: [["walk"]] },
-        { time: "07:10", title: "JR 山陽本線 廣島 → 岡山（在來線）", note: ["約 3 小時／3,080 円，在糸崎換車（部分班次還要在福山再換一次）", "新幹線のぞみ 只要 35 分，但要 5,600 円以上；在來線省約 2,500 円", "山陽本線這段約 1 小時 1–2 班，換車銜接不一定順，前一晚先查好班次", "全程沒有指定席，多是通勤型橫向座位"], tags: [["jr", "約 3 小時"]], move: true },
-        { time: "10:20", title: "抵達岡山・寄行李", note: ["Hotel Maira 在站東口步行 10 分，check-in 14:00，可以先走去寄放行李", "或者直接丟岡山站投幣置物櫃，晚上回來拿"], tags: [["walk"]] },
+        { time: "06:30", title: "廣島飯店退房 → 廣島站新幹線口", note: ["從鶴見町搭広電或計程車約 15 分，6:55 前到巴士乘車處"], tags: [["walk"]] },
+        { time: "07:10", title: "高速巴士 サンサンライナー 廣島 → 岡山", must: true, note: ["廣島站新幹線口 07:10 → 岡山站西口 10:12（約 3 小時 02 分）／3,100 円", "直達不用換車、有對號座，可以上網預約（両備巴士／広交観光）", "這是早上第一班，下一班是 08:25", "2026/10/1 改點後廣島站新幹線口才成為發車站，出發前再確認一次時刻"], tags: [["bus", "約 3 小時"]], move: true },
+        { time: "10:20", title: "抵達岡山・寄行李", note: ["巴士停在岡山站西口，Hotel Maira 在東口，要穿過車站走約 10 分", "飯店 check-in 14:00，但可以先去寄放行李；或直接丟岡山站投幣置物櫃"], tags: [["walk"]] },
         { time: "11:00", title: "岡山後樂園 ＋ 岡山城", must: true, note: ["後樂園 10–3 月 8:00–17:00（入園至 16:45）", "岡山城 9:00–17:30（入館至 17:00），黑色天守很好拍", "兩個隔一條旭川，有共通券（約 640 円）"], tags: [["bus", "岡山站前搭巴士約 10 分"]] },
         { time: "13:00", title: "午餐：岡山城下或站前", note: ["えびめし（蝦飯）、ばらずし、デミカツ丼 都是岡山的怪可愛名物"] },
         { time: "14:10", title: "JR 山陽本線 岡山 → 倉敷", note: ["約 16 分／330 円"], tags: [["jr", "約 16 分"]], move: true },
@@ -824,7 +944,8 @@
       ],
       tips: [
         "⚠️ 今天是週一，倉敷的「大原美術館」休館，所以行程以散步＋老街為主。想看大原美術館的話要換到別天。",
-        "廣島→岡山 走在來線省約 2,500 円，代價是多花兩個多小時，所以 07:10 就要出發。想多睡一點則改搭 09:30 的新幹線。",
+        "廣島→岡山 三種走法：高速巴士 3 小時／3,100 円（直達、有座位）、JR 在來線 3 小時／3,080 円（要在糸崎、有時還要在福山換車）、新幹線 35 分／5,600 円以上。巴士跟在來線價錢幾乎一樣，但巴士不用拖著行李換車，所以排巴士。",
+        "巴士建議先上網訂位。萬一沒搭到 07:10 這班，下一班 08:25（約 11:30 到岡山），後樂園跟倉敷各砍半小時還排得下。",
         "明天去直島，大件行李建議直接用宅急便從岡山飯店寄到姬路飯店，這樣島上只背小包。",
         "今天先確認明天直島的票：直島新美術館的開館月曆（11–12 月有幾天休館）、家プロジェクト共通券，想去南寺的話也先訂。"
       ]
@@ -852,7 +973,7 @@
         { time: "16:10", title: "巴士回宮浦", note: ["有剩時間可以順路看 ANDO MUSEUM（本村）或直島錢湯「I♥湯」（宮浦，真的可以泡）"], tags: [["bus"]], move: true },
         { time: "16:35", title: "渡輪 宮浦 → 宇野", note: ["16:55 抵達宇野", "宮浦發船：6:00 / 6:40 / 7:50 / 8:52 / 9:52 / 11:10 / 12:45 / 14:55 / 16:02 / 16:35 / 17:35 / 19:02 / 20:25"], tags: [["ferry", "約 20 分"]], move: true },
         { time: "17:15", title: "JR 宇野 → 岡山", note: ["約 55 分，18:10 前後到岡山"], tags: [["jr", "約 55 分"]], move: true },
-        { time: "18:25", title: "JR 山陽本線 岡山 → 姬路（在來線）", note: ["約 1 小時 30 分／1,520 円，在相生換車（部分班次直通）", "新幹線只要 20–25 分，但自由席要 3,280 円；在來線省約 1,760 円", "20:00 前後抵達姬路"], tags: [["jr", "約 1 小時 30 分"]], move: true },
+        { time: "18:25", title: "JR 山陽本線 岡山 → 姬路（在來線）", note: ["約 1 小時 30 分／1,520 円，在相生換車（部分班次直通）", "不用買票，ICOCA／Suica 刷卡直接進站", "新幹線只要 20–25 分，但自由席要 3,280 円；在來線省約 1,760 円", "20:00 前後抵達姬路"], tags: [["jr", "約 1 小時 30 分"]], move: true },
         { time: "20:00", title: "入住 KOKO HOTEL 姫路城・晚餐", note: ["飯店在綿町，姬路站走約 7 分", "姬路名物：姬路おでん（薑醬油沾著吃）、穴子、玉子燒"] }
       ],
       tips: [
@@ -878,21 +999,15 @@
         { time: "12:00", title: "午餐：城下或姬路站前", note: ["姬路おでん、穴子丼；站前 piole 姬路 樓上有不少店"] },
         { time: "13:00", title: "午餐後回飯店拿行李 → 姬路站", note: ["想輕鬆的話：行李從姬路飯店用宅急便寄回東京家（隔天到）"], tags: [["pack", "宅急便（選用）"]] },
         { time: "14:45", title: "JR 新快速 姬路 → 新大阪", note: ["約 63 分／1,520 円，15:48 前後到新大阪", "新快速是姬路始發，提早 10 分上車就有位子；白天約 15 分一班", "這段不用先買票，ICOCA／Suica 直接刷進站", "買自由席的話就搭這班，到新大阪留 25 分鐘排隊；買指定席可以晚一班（15:00 發），轉乘 12 分就夠"], tags: [["jr", "約 63 分"]], move: true },
-        { time: "16:15", title: "新幹線 のぞみ168 新大阪 → 東京", note: ["16:15 發 → 18:45 到東京（2 小時 30 分）", "自由席是 1・2 號車（2025 年 3 月改點後 3 號車變指定席，只剩兩節）", "買自由席的話：早點到月台、站在自由席車門位置排隊"], tags: [["shin", "2 小時 30 分"]], move: true },
+        { time: "16:15", title: "新幹線 のぞみ168 新大阪 → 東京", must: true, note: ["16:15 發 → 18:45 到東京（2 小時 30 分）", "✅ 車票已買好", "若買的是自由席，自由席在 1・2 號車，早點到月台排隊"], tags: [["shin", "2 小時 30 分"]], move: true },
         { time: "18:50", title: "JR 山手線／京濱東北線 東京 → 日暮里", note: ["約 12 分／180 円，19:05 前後到日暮里"], tags: [["jr", "約 12 分"]], move: true },
         { time: "19:10", title: "到 sakura cafe", note: ["行李多的話日暮里站有置物櫃"], tags: [["walk"]] },
         { time: "19:20", title: "sakura cafe 日文英文交流會", must: true, note: ["日本語・英語の言語交流会 / Japanese–English language exchange", "地點：日暮里 sakura cafe"] },
         { time: "21:30", title: "搭公車回家", tags: [["bus"]], move: true }
       ],
       tips: [
-        "要先買的只有「新大阪 → 東京」這段新幹線。姬路→新大阪 的新快速是在來線，刷 IC 卡就好，不用買票。",
-        "のぞみ 新大阪發的參考時刻（→ 東京）：16:00→18:27・16:06→18:33・16:09→18:36・16:15→18:45・16:30→18:57。再晚的 16:30 那班到日暮里要 19:17。",
-        "自由席 vs 指定席：差 850 円（通常期）。自由席不保證有位，先到先坐，而且 2025 年 3 月改點後只剩 1・2 號車兩節。",
-        "自由席的關鍵是「這班是不是新大阪始發」：從博多・廣島直通過來的車，自由席常常在新大阪就坐滿了；新大阪始發的車則是空車進月台，排一下幾乎都坐得到。JR 東海新大阪站自己也是這樣建議的。168 號是不是始發無法事前查證，現場看發車看板（始發車會標新大阪為起點）。",
-        "自由席票沒有綁車次，所以就算 16:15 這班太擠，也可以放掉改搭下一班。這是自由席唯一比指定席好的地方。",
-        "こだま 最便宜但要 4 小時，中午就得離開姬路，姬路城會看不完，不建議。",
-        "新幹線票可在 smartEX／EX 預約 App 線上訂，也可以到車站綠色窗口；線上訂當天直接刷 IC 卡進站最方便。",
-        "⚠️ GW・盂蘭盆・年末年始 のぞみ 會「全車指定席」（沒有自由席），2026 年度連部分三連休也是。11/4 是平常的週三，照理有自由席，但買票前還是看一下 JR 東海的公告。",
+        "新大阪 → 東京 的新幹線票已經買好了。姬路 → 新大阪 的新快速是在來線，刷 ICOCA／Suica 進站就好，不用買票。",
+        "萬一沒趕上 16:15 這班，のぞみ 新大阪發的下一班是 16:30 → 東京 18:57，到日暮里約 19:17。指定席改班要到綠色窗口換票，自由席票則不綁車次、直接搭下一班。",
         "最大風險是姬路城天守閣排隊。如果 11:30 還沒進天守，就先放棄內部、拍外觀去吃飯，不要壓到下午的車。"
       ]
     },
@@ -1011,7 +1126,7 @@
         "旅遊保險（含不便險）",
         "直島：看直島新美術館 11 月開館月曆（有幾天休館）",
         "直島：家プロジェクト共通券（想去南寺要另外日時指定預約）",
-        "新幹線票：11/4 のぞみ168 新大阪 16:15 → 東京（決定自由席 or 指定席）",
+        "11/2 高速巴士訂位：サンサンライナー 廣島 07:10 → 岡山",
         "查 11/1 宮島潮見表",
         "郵局 転居届（郵件轉送）"
       ]
@@ -1247,6 +1362,206 @@
       (all.length ? (done / all.length * 100) : 0) + "%";
   }
 
+  /* ---- 分帳 ---- */
+  var SPLIT_KEY = "trip2026-split";
+  var PEOPLE = {
+    paipai:  { name: "派派",    cls: "coral" },
+    crystal: { name: "Crystal", cls: "blue"  }
+  };
+
+  var splitMode = null;     // null = 還在判斷, "db" | "local"
+  var splitCol = null;
+  var splitRows = [];
+  var splitWho = "paipai";
+
+  function splitLoadLocal() {
+    try { return JSON.parse(localStorage.getItem(SPLIT_KEY) || "[]") || []; }
+    catch (e) { return []; }
+  }
+  function splitSaveLocal() {
+    try { localStorage.setItem(SPLIT_KEY, JSON.stringify(splitRows)); } catch (e) {}
+  }
+
+  function yen(n) { return "¥" + Math.round(n).toLocaleString("en-US"); }
+
+  function splitNote(text) {
+    var el = document.getElementById("splitNote");
+    if (el) el.textContent = text;
+  }
+
+  function splitReadOnly(text) {
+    var f = document.getElementById("splitForm");
+    if (f) f.classList.add("is-readonly");
+    splitNote(text);
+  }
+
+  function renderSplit() {
+    var sum = document.getElementById("splitSummary");
+    var list = document.getElementById("splitList");
+    if (!sum || !list) return;
+
+    var paid = { paipai: 0, crystal: 0 };
+    splitRows.forEach(function (r) {
+      if (paid[r.who] != null) paid[r.who] += Number(r.amount) || 0;
+    });
+    var total = paid.paipai + paid.crystal;
+    var each = total / 2;
+    var diff = paid.paipai - each;
+
+    var settle;
+    if (total === 0) settle = "還沒有任何紀錄";
+    else if (Math.abs(diff) < 0.5) settle = "剛好打平，不用找補";
+    else if (diff > 0) settle = "Crystal 要給派派 <b>" + yen(diff) + "</b>";
+    else settle = "派派要給 Crystal <b>" + yen(-diff) + "</b>";
+
+    sum.innerHTML =
+      '<div class="split-sum">' +
+        '<div class="sum-grid">' +
+          '<div class="sum-cell c-coral"><span>派派付了</span><b>' + yen(paid.paipai) + '</b></div>' +
+          '<div class="sum-cell c-blue"><span>Crystal 付了</span><b>' + yen(paid.crystal) + '</b></div>' +
+          '<div class="sum-cell"><span>總共</span><b>' + yen(total) + '</b></div>' +
+          '<div class="sum-cell"><span>每人應分擔</span><b>' + yen(each) + '</b></div>' +
+        '</div>' +
+        '<p class="settle">' + settle + '</p>' +
+      '</div>';
+
+    if (!splitRows.length) {
+      list.innerHTML = '<p class="split-empty">還沒有紀錄。上面填金額、按「記一筆」就會出現在這裡。</p>';
+      return;
+    }
+
+    var rows = splitRows.slice().sort(function (a, b) { return b.at - a.at; });
+    var html = '<ul class="split-list">';
+    rows.forEach(function (r) {
+      var p = PEOPLE[r.who] || { name: "？", cls: "" };
+      var d = new Date(r.at);
+      html +=
+        '<li>' +
+          '<span class="tag ' + p.cls + '">' + esc(p.name) + '</span>' +
+          '<span class="e-label">' + esc(r.label || "（沒寫項目）") + '</span>' +
+          '<span class="e-date">' + (d.getMonth() + 1) + "/" + d.getDate() + '</span>' +
+          '<b class="e-amt">' + yen(r.amount) + '</b>' +
+          '<button class="e-del" type="button" data-id="' + esc(r.id) + '" aria-label="刪除這筆">×</button>' +
+        '</li>';
+    });
+    list.innerHTML = html + '</ul>';
+  }
+
+  function splitAdd(who, amount, label) {
+    var at = Date.now();
+    if (splitMode === "db") {
+      splitCol.add({ who: who, amount: amount, label: label, at: at })
+        .catch(function (e) {
+          if (e && (e.code === "invalid_argument" || e.code === "not_granted")) {
+            splitReadOnly("這個帳號沒有寫入權限，只能看紀錄。");
+          } else {
+            splitNote("存不進去（" + ((e && e.code) || "unknown") + "），等一下再試。");
+          }
+        });
+    } else {
+      splitRows.push({
+        id: String(at) + "-" + Math.random().toString(36).slice(2, 8),
+        who: who, amount: amount, label: label, at: at
+      });
+      splitSaveLocal();
+      renderSplit();
+    }
+  }
+
+  function splitRemove(id) {
+    if (splitMode === "db") {
+      splitCol.doc(id).delete().catch(function (e) {
+        splitNote("刪不掉（" + ((e && e.code) || "unknown") + "）。");
+      });
+    } else {
+      splitRows = splitRows.filter(function (r) { return r.id !== id; });
+      splitSaveLocal();
+      renderSplit();
+    }
+  }
+
+  function splitGoLocal(reason) {
+    splitMode = "local";
+    splitRows = splitLoadLocal();
+    splitNote(reason);
+    renderSplit();
+  }
+
+  function initSplit() {
+    var form = document.getElementById("splitForm");
+    var pick = document.getElementById("whoPick");
+    var amountEl = document.getElementById("splitAmount");
+    var labelEl = document.getElementById("splitLabel");
+
+    pick.addEventListener("click", function (e) {
+      var b = e.target.closest(".who-btn");
+      if (!b) return;
+      splitWho = b.dataset.who;
+      Array.prototype.forEach.call(pick.children, function (x) {
+        var on = x === b;
+        x.classList.toggle("is-on", on);
+        x.setAttribute("aria-pressed", on ? "true" : "false");
+      });
+    });
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var amt = Number(amountEl.value);
+      if (!(amt > 0)) { amountEl.focus(); return; }
+      splitAdd(splitWho, amt, labelEl.value.trim());
+      amountEl.value = "";
+      labelEl.value = "";
+      amountEl.focus();
+    });
+
+    document.getElementById("splitList").addEventListener("click", function (e) {
+      var b = e.target.closest(".e-del");
+      if (b) splitRemove(b.dataset.id);
+    });
+
+    if (!window.claude || typeof window.claude.use !== "function") {
+      splitGoLocal("離線模式：紀錄只存在這台裝置的瀏覽器裡。");
+      return;
+    }
+
+    renderSplit();
+
+    window.claude.use("db").then(function (db) {
+      if (!db) {
+        splitGoLocal("連不上共用紀錄，改存在這台裝置。");
+        return;
+      }
+      splitMode = "db";
+      splitCol = db.collection("expenses");
+      splitNote("共用紀錄：派派和 Crystal 看到的是同一份。");
+
+      splitCol.orderBy("at", "desc").limit(300).onSnapshot(function (snap) {
+        splitRows = snap.docs.map(function (d) {
+          var v = d.data() || {};
+          return {
+            id: d.id,
+            who: v.who,
+            amount: Number(v.amount) || 0,
+            label: typeof v.label === "string" ? v.label : "",
+            at: Number(v.at) || 0
+          };
+        });
+        renderSplit();
+      }, function (err) {
+        splitGoLocal("共用紀錄讀不到（" + (err && err.code) + "），改存在這台裝置。");
+      });
+
+      return window.claude.use("user");
+    }).then(function (user) {
+      if (!user || splitMode !== "db") return;
+      return Promise.resolve(user.can("data.write")).then(function (ok) {
+        if (ok === false) splitReadOnly("這個帳號是唯讀的，看得到紀錄但不能新增。");
+      });
+    }).catch(function () {
+      if (splitMode !== "db") splitGoLocal("連不上共用紀錄，改存在這台裝置。");
+    });
+  }
+
   /* ---- motion toggle ---- */
   function initMotion() {
     var btn = document.getElementById("motionBtn");
@@ -1282,6 +1597,7 @@
   renderTabs();
   show(0);
   renderTodos();
+  initSplit();
   initMotion();
 })();
 </script>
