@@ -295,10 +295,22 @@
     border:0;background:transparent;outline:none;
     flex:1;min-width:0;padding:8px 0;
   }
-  .split-form input#splitLabel{
+  .split-form input#splitLabel,
+  .split-form input#splitDate{
     border:var(--bw) solid var(--ink);border-radius:14px;background:var(--cream);
     padding:8px 12px;font-size:.95rem;
   }
+  .split-form input#splitDate{flex:none;min-width:0}
+  .kind-btn{
+    font:inherit;font-size:.95rem;cursor:pointer;color:var(--ink);
+    padding:6px 18px;background:var(--cream);
+    border:var(--bw) solid var(--ink);border-radius:999px;white-space:nowrap;
+  }
+  .kind-btn.is-on{background:var(--yellow);box-shadow:var(--shadow-sm)}
+  .split-row{flex-wrap:wrap}
+  .who-pick{flex-wrap:wrap}
+  .split-hint{margin:10px 0 0;font-size:.82rem;opacity:.75}
+  .split-list li.is-solo{background:#FFF6E0}
   .split-form input[type=number]{-moz-appearance:textfield;appearance:textfield}
   .split-form input[type=number]::-webkit-outer-spin-button,
   .split-form input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
@@ -791,15 +803,26 @@
   <!-- ============ split ============ -->
   <section id="split">
     <h2 class="h2"><span class="bar" style="background:var(--yellow)"></span>分帳</h2>
-    <p class="sub">誰先付了就記一筆，下面自動算出最後誰該補給誰。</p>
+    <p class="sub">誰先付了就記一筆。「均分」兩人各分一半，「單向」整筆算對方的。下面自動算出最後誰該補給誰。</p>
 
     <form class="split-form" id="splitForm" autocomplete="off">
       <div class="split-row">
-        <span class="split-label">誰付的</span>
+        <span class="split-label">類型</span>
+        <div class="who-pick" id="kindPick">
+          <button type="button" class="kind-btn is-on" data-kind="split" aria-pressed="true">均分</button>
+          <button type="button" class="kind-btn" data-kind="solo" aria-pressed="false">單向</button>
+        </div>
+      </div>
+      <div class="split-row">
+        <span class="split-label" id="whoLabel">誰付的</span>
         <div class="who-pick" id="whoPick">
           <button type="button" class="who-btn is-on" data-who="paipai" aria-pressed="true">派派</button>
           <button type="button" class="who-btn" data-who="crystal" aria-pressed="false">Crystal</button>
         </div>
+      </div>
+      <div class="split-row">
+        <span class="split-label">日期</span>
+        <input id="splitDate" type="date" aria-label="日期">
       </div>
       <div class="split-row">
         <span class="split-label">金額</span>
@@ -813,6 +836,7 @@
         <input id="splitLabel" type="text" maxlength="40" placeholder="可留空，例：宮島船票" aria-label="項目">
       </div>
       <button class="split-add" type="submit">記一筆</button>
+      <p class="split-hint" id="splitHint">均分：這筆兩個人各分一半。</p>
       <p class="split-note" id="splitNote">讀取中⋯</p>
     </form>
 
@@ -1373,6 +1397,21 @@
   var splitCol = null;
   var splitRows = [];
   var splitWho = "paipai";
+  var splitKind = "split";   // "split" = 均分, "solo" = 單向
+
+  function pad2(n) { return (n < 10 ? "0" : "") + n; }
+  function localDateStr(ms) {
+    var d = new Date(ms);
+    return d.getFullYear() + "-" + pad2(d.getMonth() + 1) + "-" + pad2(d.getDate());
+  }
+  // 舊資料沒有 date 欄位，就從建立時間推回去
+  function rowDate(r) {
+    return (typeof r.date === "string" && /^\d{4}-\d{2}-\d{2}$/.test(r.date))
+      ? r.date : localDateStr(r.at);
+  }
+  // 舊資料沒有 kind 欄位，一律當成均分
+  function rowKind(r) { return r.kind === "solo" ? "solo" : "split"; }
+  function fmtDate(s) { var p = s.split("-"); return Number(p[1]) + "/" + Number(p[2]); }
 
   function splitLoadLocal() {
     try { return JSON.parse(localStorage.getItem(SPLIT_KEY) || "[]") || []; }
@@ -1401,26 +1440,32 @@
     if (!sum || !list) return;
 
     var paid = { paipai: 0, crystal: 0 };
+    var shared = 0;   // 均分的總額
+    var solo = 0;     // 單向的總額
+    var balance = 0;  // 正 = Crystal 欠派派；負 = 派派欠 Crystal
     splitRows.forEach(function (r) {
-      if (paid[r.who] != null) paid[r.who] += Number(r.amount) || 0;
+      var a = Number(r.amount) || 0;
+      if (paid[r.who] == null) return;
+      paid[r.who] += a;
+      var sign = r.who === "paipai" ? 1 : -1;
+      if (rowKind(r) === "solo") { solo += a; balance += sign * a; }
+      else { shared += a; balance += sign * a / 2; }
     });
     var total = paid.paipai + paid.crystal;
-    var each = total / 2;
-    var diff = paid.paipai - each;
 
     var settle;
     if (total === 0) settle = "還沒有任何紀錄";
-    else if (Math.abs(diff) < 0.5) settle = "剛好打平，不用找補";
-    else if (diff > 0) settle = "Crystal 要給派派 <b>" + yen(diff) + "</b>";
-    else settle = "派派要給 Crystal <b>" + yen(-diff) + "</b>";
+    else if (Math.abs(balance) < 0.5) settle = "剛好打平，不用找補";
+    else if (balance > 0) settle = "Crystal 要給派派 <b>" + yen(balance) + "</b>";
+    else settle = "派派要給 Crystal <b>" + yen(-balance) + "</b>";
 
     sum.innerHTML =
       '<div class="split-sum">' +
         '<div class="sum-grid">' +
           '<div class="sum-cell c-coral"><span>派派付了</span><b>' + yen(paid.paipai) + '</b></div>' +
           '<div class="sum-cell c-blue"><span>Crystal 付了</span><b>' + yen(paid.crystal) + '</b></div>' +
-          '<div class="sum-cell"><span>總共</span><b>' + yen(total) + '</b></div>' +
-          '<div class="sum-cell"><span>每人應分擔</span><b>' + yen(each) + '</b></div>' +
+          '<div class="sum-cell"><span>均分支出（每人 ' + yen(shared / 2) + '）</span><b>' + yen(shared) + '</b></div>' +
+          '<div class="sum-cell"><span>單向</span><b>' + yen(solo) + '</b></div>' +
         '</div>' +
         '<p class="settle">' + settle + '</p>' +
       '</div>';
@@ -1430,16 +1475,22 @@
       return;
     }
 
-    var rows = splitRows.slice().sort(function (a, b) { return b.at - a.at; });
+    var rows = splitRows.slice().sort(function (a, b) {
+      var da = rowDate(a), db = rowDate(b);
+      if (da !== db) return da < db ? 1 : -1;
+      return b.at - a.at;
+    });
     var html = '<ul class="split-list">';
     rows.forEach(function (r) {
       var p = PEOPLE[r.who] || { name: "？", cls: "" };
-      var d = new Date(r.at);
+      var isSolo = rowKind(r) === "solo";
+      var other = r.who === "paipai" ? PEOPLE.crystal : PEOPLE.paipai;
+      var tagText = isSolo ? p.name + " → " + other.name : p.name;
       html +=
-        '<li>' +
-          '<span class="tag ' + p.cls + '">' + esc(p.name) + '</span>' +
+        '<li' + (isSolo ? ' class="is-solo"' : '') + '>' +
+          '<span class="tag ' + p.cls + '">' + esc(tagText) + '</span>' +
           '<span class="e-label">' + esc(r.label || "（沒寫項目）") + '</span>' +
-          '<span class="e-date">' + (d.getMonth() + 1) + "/" + d.getDate() + '</span>' +
+          '<span class="e-date">' + fmtDate(rowDate(r)) + '</span>' +
           '<b class="e-amt">' + yen(r.amount) + '</b>' +
           '<button class="e-del" type="button" data-id="' + esc(r.id) + '" aria-label="刪除這筆">×</button>' +
         '</li>';
@@ -1447,10 +1498,11 @@
     list.innerHTML = html + '</ul>';
   }
 
-  function splitAdd(who, amount, label) {
+  function splitAdd(who, amount, label, kind, date) {
     var at = Date.now();
+    var body = { who: who, amount: amount, label: label, at: at, kind: kind, date: date };
     if (splitMode === "db") {
-      splitCol.add({ who: who, amount: amount, label: label, at: at })
+      splitCol.add(body)
         .catch(function (e) {
           if (e && (e.code === "invalid_argument" || e.code === "not_granted")) {
             splitReadOnly("這個帳號沒有寫入權限，只能看紀錄。");
@@ -1459,10 +1511,8 @@
           }
         });
     } else {
-      splitRows.push({
-        id: String(at) + "-" + Math.random().toString(36).slice(2, 8),
-        who: who, amount: amount, label: label, at: at
-      });
+      body.id = String(at) + "-" + Math.random().toString(36).slice(2, 8);
+      splitRows.push(body);
       splitSaveLocal();
       renderSplit();
     }
@@ -1490,29 +1540,58 @@
   function initSplit() {
     var form = document.getElementById("splitForm");
     var pick = document.getElementById("whoPick");
+    var kindPick = document.getElementById("kindPick");
     var amountEl = document.getElementById("splitAmount");
     var labelEl = document.getElementById("splitLabel");
+    var dateEl = document.getElementById("splitDate");
+
+    dateEl.value = localDateStr(Date.now());
+
+    function markOn(container, btn) {
+      Array.prototype.forEach.call(container.children, function (x) {
+        var on = x === btn;
+        x.classList.toggle("is-on", on);
+        x.setAttribute("aria-pressed", on ? "true" : "false");
+      });
+    }
+
+    function syncKindUI() {
+      var isSolo = splitKind === "solo";
+      document.getElementById("whoLabel").textContent = isSolo ? "誰付給誰" : "誰付的";
+      pick.children[0].textContent = isSolo ? "派派 → Crystal" : "派派";
+      pick.children[1].textContent = isSolo ? "Crystal → 派派" : "Crystal";
+      document.getElementById("splitHint").textContent = isSolo
+        ? "單向：整筆算收的那一方的。幫對方付、或還錢給對方都用這個。"
+        : "均分：這筆兩個人各分一半。";
+    }
+
+    kindPick.addEventListener("click", function (e) {
+      var b = e.target.closest(".kind-btn");
+      if (!b) return;
+      splitKind = b.dataset.kind;
+      markOn(kindPick, b);
+      syncKindUI();
+    });
 
     pick.addEventListener("click", function (e) {
       var b = e.target.closest(".who-btn");
       if (!b) return;
       splitWho = b.dataset.who;
-      Array.prototype.forEach.call(pick.children, function (x) {
-        var on = x === b;
-        x.classList.toggle("is-on", on);
-        x.setAttribute("aria-pressed", on ? "true" : "false");
-      });
+      markOn(pick, b);
     });
 
     form.addEventListener("submit", function (e) {
       e.preventDefault();
       var amt = Number(amountEl.value);
       if (!(amt > 0)) { amountEl.focus(); return; }
-      splitAdd(splitWho, amt, labelEl.value.trim());
+      var date = /^\d{4}-\d{2}-\d{2}$/.test(dateEl.value) ? dateEl.value : localDateStr(Date.now());
+      splitAdd(splitWho, amt, labelEl.value.trim(), splitKind, date);
       amountEl.value = "";
       labelEl.value = "";
       amountEl.focus();
     });
+
+    syncKindUI();
 
     document.getElementById("splitList").addEventListener("click", function (e) {
       var b = e.target.closest(".e-del");
@@ -1543,7 +1622,9 @@
             who: v.who,
             amount: Number(v.amount) || 0,
             label: typeof v.label === "string" ? v.label : "",
-            at: Number(v.at) || 0
+            at: Number(v.at) || 0,
+            kind: v.kind === "solo" ? "solo" : "split",
+            date: typeof v.date === "string" ? v.date : ""
           };
         });
         renderSplit();
